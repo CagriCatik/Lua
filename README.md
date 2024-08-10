@@ -1,6 +1,6 @@
 # Lua Basics Tutorial Series
 
-This repository contains a collection of Lua basics tutorial videos. These tutorials cover fundamental Lua programming concepts and techniques. Whether you're new to Lua or need a refresher, this series will guide you through the essential aspects of the language.
+These tutorials cover fundamental Lua programming concepts and techniques. Whether you're new to Lua or need a refresher, this series will guide you through the essential aspects of the language.
 
 ## Table of Contents
 
