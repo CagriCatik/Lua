@@ -1,0 +1,322 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Co-Routines</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="01.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="02.html"><strong aria-hidden="true">2.</strong> Comments and Printing</a></li><li class="chapter-item expanded "><a href="03.html"><strong aria-hidden="true">3.</strong> Data Types, Scopes, and Variables</a></li><li class="chapter-item expanded "><a href="04.html"><strong aria-hidden="true">4.</strong> Math Operations and Math Library</a></li><li class="chapter-item expanded "><a href="05.html"><strong aria-hidden="true">5.</strong> Strings</a></li><li class="chapter-item expanded "><a href="06.html"><strong aria-hidden="true">6.</strong> if Statements</a></li><li class="chapter-item expanded "><a href="07.html"><strong aria-hidden="true">7.</strong> Loops</a></li><li class="chapter-item expanded "><a href="08.html"><strong aria-hidden="true">8.</strong> User Input</a></li><li class="chapter-item expanded "><a href="09.html"><strong aria-hidden="true">9.</strong> Tables - Arrays</a></li><li class="chapter-item expanded "><a href="10.html"><strong aria-hidden="true">10.</strong> Functions</a></li><li class="chapter-item expanded "><a href="11.html" class="active"><strong aria-hidden="true">11.</strong> Co-Routines</a></li><li class="chapter-item expanded "><a href="12.html"><strong aria-hidden="true">12.</strong> Working with Files</a></li><li class="chapter-item expanded "><a href="13.html"><strong aria-hidden="true">13.</strong> The OS Module</a></li><li class="chapter-item expanded "><a href="14.html"><strong aria-hidden="true">14.</strong> Creating Custom Modules</a></li><li class="chapter-item expanded "><a href="15.html"><strong aria-hidden="true">15.</strong> OOP</a></li><li class="chapter-item expanded "><a href="16.html"><strong aria-hidden="true">16.</strong> Metamethods</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title"></h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="co-routines"><a class="header" href="#co-routines">Co-Routines</a></h1>
+<p>In software development, particularly in programming languages like Lua, co-routines provide a powerful mechanism for managing the flow of program execution. They allow a function to pause its execution at a specific point, transfer control to another function, and later resume from where it paused. This tutorial will provide an in-depth look at how co-routines function in Lua, how they compare to similar concepts in other languages like async/await, and how they can be effectively utilized in practical scenarios.</p>
+<h2 id="understanding-co-routines"><a class="header" href="#understanding-co-routines">Understanding Co-Routines</a></h2>
+<p>A co-routine in Lua can be thought of as a function that can suspend its execution (using <code>coroutine.yield</code>) and then resume it later (using <code>coroutine.resume</code>). Unlike a typical function call, which follows a linear flow (start, execute, return), a co-routine can yield at a specific point, allowing other co-routines or code to execute before it resumes. This feature is particularly useful for managing complex control flows and implementing cooperative multitasking.</p>
+<h3 id="basic-structure-of-a-co-routine"><a class="header" href="#basic-structure-of-a-co-routine">Basic Structure of a Co-Routine</a></h3>
+<p>To define a co-routine in Lua, you use the <code>coroutine.create</code> function, which takes a function as an argument. This creates a new co-routine, which can later be resumed.</p>
+<p>Here is a basic example:</p>
+<pre><code class="language-lua">local routine1 = coroutine.create(function()
+    for i = 1, 10 do
+        print("Routine 1 - Step", i)
+        if i == 5 then
+            coroutine.yield()  -- Pause execution at step 5
+        end
+    end
+end)
+</code></pre>
+<p>In this example, <code>routine1</code> is a co-routine that prints a message from 1 to 10. However, it pauses when <code>i</code> equals 5, yielding control back to the caller.</p>
+<h3 id="resuming-a-co-routine"><a class="header" href="#resuming-a-co-routine">Resuming a Co-Routine</a></h3>
+<p>To resume a co-routine that has yielded, you use the <code>coroutine.resume</code> function. This resumes the co-routine from the point where it yielded.</p>
+<pre><code class="language-lua">coroutine.resume(routine1)  -- Starts the routine, executes until it yields
+</code></pre>
+<p>If you run the above code, the co-routine will execute and pause at the fifth iteration. To continue its execution, you would call <code>coroutine.resume</code> again:</p>
+<pre><code class="language-lua">coroutine.resume(routine1)  -- Resumes and continues until completion
+</code></pre>
+<h3 id="example-managing-multiple-co-routines"><a class="header" href="#example-managing-multiple-co-routines">Example: Managing Multiple Co-Routines</a></h3>
+<p>Let's consider a more complex example where two co-routines work in tandem.</p>
+<pre><code class="language-lua">local routine1 = coroutine.create(function()
+    for i = 1, 10 do
+        print("Routine 1 - Step", i)
+        if i == 5 then
+            coroutine.yield()
+        end
+    end
+end)
+
+local routine2 = coroutine.create(function()
+    for i = 11, 20 do
+        print("Routine 2 - Step", i)
+    end
+end)
+
+coroutine.resume(routine1)  -- Executes routine1 until it yields at step 5
+coroutine.resume(routine2)  -- Executes routine2 entirely
+coroutine.resume(routine1)  -- Resumes routine1 from where it left off
+</code></pre>
+<p>In this scenario:</p>
+<ol>
+<li><code>routine1</code> runs and yields at step 5.</li>
+<li><code>routine2</code> then runs entirely from 11 to 20.</li>
+<li>Finally, <code>routine1</code> resumes from step 6 and completes.</li>
+</ol>
+<p>This behavior demonstrates how co-routines can interleave their execution, which is useful in situations where tasks need to be executed in a specific order without blocking each other.</p>
+<h3 id="co-routine-states"><a class="header" href="#co-routine-states">Co-Routine States</a></h3>
+<p>Co-routines in Lua can be in one of four states:</p>
+<ul>
+<li><strong>Running</strong>: The co-routine is currently executing.</li>
+<li><strong>Suspended</strong>: The co-routine is paused and can be resumed.</li>
+<li><strong>Normal</strong>: The co-routine is neither running nor suspended (it’s the initial state).</li>
+<li><strong>Dead</strong>: The co-routine has finished execution and cannot be resumed.</li>
+</ul>
+<p>You can query the state of a co-routine using <code>coroutine.status</code>:</p>
+<pre><code class="language-lua">print(coroutine.status(routine1))  -- Outputs the current state of routine1
+</code></pre>
+<p>Understanding these states is crucial for effectively managing co-routines, particularly when determining when to resume or halt their execution.</p>
+<h3 id="practical-use-case"><a class="header" href="#practical-use-case">Practical Use Case</a></h3>
+<p>Consider a scenario where you are copying a large file, and you want to update the user interface (e.g., a progress bar) as each chunk of the file is copied. Co-routines can be used to yield control after each chunk is copied, allowing the UI to update:</p>
+<pre><code class="language-lua">local function copyFile(source, destination)
+    local input = io.open(source, "rb")
+    local output = io.open(destination, "wb")
+
+    while true do
+        local chunk = input:read(1024)
+        if not chunk then break end
+        output:write(chunk)
+        coroutine.yield()  -- Yield after writing each chunk
+    end
+
+    input:close()
+    output:close()
+end
+
+local routine = coroutine.create(copyFile)
+coroutine.resume(routine)  -- Start the copy process
+</code></pre>
+<p>In this example, the copy operation is split into chunks, and the co-routine yields after writing each chunk. This allows for periodic updates to the UI or other tasks to be performed between chunks.</p>
+<h3 id="error-handling-in-co-routines"><a class="header" href="#error-handling-in-co-routines">Error Handling in Co-Routines</a></h3>
+<p>When using co-routines, it is essential to handle errors that may occur during execution. If a co-routine encounters an error, it will stop, and its state will become "dead". You can catch errors using Lua's standard error handling mechanisms.</p>
+<pre><code class="language-lua">local status, err = coroutine.resume(routine1)
+if not status then
+    print("Error occurred:", err)
+end
+</code></pre>
+<h3 id="conclusion"><a class="header" href="#conclusion">Conclusion</a></h3>
+<p>Co-routines in Lua offer a flexible and powerful way to manage execution flow, particularly in situations where tasks need to be interleaved or executed in a non-blocking manner. By understanding how to create, manage, and query the state of co-routines, you can leverage them to solve complex problems in a clean and efficient way.</p>
+<p>This tutorial has provided a comprehensive overview of co-routines in Lua, including basic usage, state management, and practical applications. By applying these concepts, you can enhance the concurrency and efficiency of your Lua programs, making them more responsive and capable of handling a wider range of tasks concurrently.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="10.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="12.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="10.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="12.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

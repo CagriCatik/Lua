@@ -1,0 +1,387 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Loops</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="01.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="02.html"><strong aria-hidden="true">2.</strong> Comments and Printing</a></li><li class="chapter-item expanded "><a href="03.html"><strong aria-hidden="true">3.</strong> Data Types, Scopes, and Variables</a></li><li class="chapter-item expanded "><a href="04.html"><strong aria-hidden="true">4.</strong> Math Operations and Math Library</a></li><li class="chapter-item expanded "><a href="05.html"><strong aria-hidden="true">5.</strong> Strings</a></li><li class="chapter-item expanded "><a href="06.html"><strong aria-hidden="true">6.</strong> if Statements</a></li><li class="chapter-item expanded "><a href="07.html" class="active"><strong aria-hidden="true">7.</strong> Loops</a></li><li class="chapter-item expanded "><a href="08.html"><strong aria-hidden="true">8.</strong> User Input</a></li><li class="chapter-item expanded "><a href="09.html"><strong aria-hidden="true">9.</strong> Tables - Arrays</a></li><li class="chapter-item expanded "><a href="10.html"><strong aria-hidden="true">10.</strong> Functions</a></li><li class="chapter-item expanded "><a href="11.html"><strong aria-hidden="true">11.</strong> Co-Routines</a></li><li class="chapter-item expanded "><a href="12.html"><strong aria-hidden="true">12.</strong> Working with Files</a></li><li class="chapter-item expanded "><a href="13.html"><strong aria-hidden="true">13.</strong> The OS Module</a></li><li class="chapter-item expanded "><a href="14.html"><strong aria-hidden="true">14.</strong> Creating Custom Modules</a></li><li class="chapter-item expanded "><a href="15.html"><strong aria-hidden="true">15.</strong> OOP</a></li><li class="chapter-item expanded "><a href="16.html"><strong aria-hidden="true">16.</strong> Metamethods</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title"></h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="loops"><a class="header" href="#loops">Loops</a></h1>
+<p>Loops are a fundamental concept in programming, enabling repetitive execution of a block of code until a specified condition is met. Lua, a powerful yet lightweight scripting language, offers robust support for loops, including <code>for</code>, <code>while</code>, and <code>repeat</code> loops. Understanding how these loops function in Lua is crucial for developing efficient and effective code. This tutorial will systematically explore the different types of loops in Lua, their syntax, and their applications.</p>
+<h2 id="the-for-loop"><a class="header" href="#the-for-loop">The <code>for</code> Loop</a></h2>
+<h3 id="syntax-and-basic-usage"><a class="header" href="#syntax-and-basic-usage">Syntax and Basic Usage</a></h3>
+<p>In Lua, the <code>for</code> loop is typically used to iterate over a range of numbers. The syntax is as follows:</p>
+<pre><code class="language-lua">for i = start, stop, step do
+    -- Code block to execute
+end
+</code></pre>
+<ul>
+<li><strong><code>i</code></strong>: The loop control variable.</li>
+<li><strong><code>start</code></strong>: The initial value of <code>i</code>.</li>
+<li><strong><code>stop</code></strong>: The final value of <code>i</code>, where the loop terminates.</li>
+<li><strong><code>step</code></strong> <em>(optional)</em>: The increment or decrement value for each iteration. If omitted, the step defaults to <code>1</code>.</li>
+</ul>
+<h3 id="example"><a class="header" href="#example">Example</a></h3>
+<p>Let's examine a basic example:</p>
+<pre><code class="language-lua">for i = 1, 10, 1 do
+    print(i)
+end
+</code></pre>
+<p>This loop initializes <code>i</code> to <code>1</code>, increments it by <code>1</code> each iteration, and prints the value of <code>i</code> until <code>i</code> exceeds <code>10</code>. The output of this code would be:</p>
+<pre><code>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</code></pre>
+<h3 id="local-scope-in-lua"><a class="header" href="#local-scope-in-lua">Local Scope in Lua</a></h3>
+<p>In Lua, loop variables like <code>i</code> are local by default. This means that the variable <code>i</code> is only accessible within the loop's body. If you try to print <code>i</code> outside the loop, you will receive a <code>nil</code> value, as demonstrated below:</p>
+<pre><code class="language-lua">for i = 1, 10 do
+    print(i)
+end
+print(i)  -- This will print 'nil'
+</code></pre>
+<h3 id="adjusting-the-step-value"><a class="header" href="#adjusting-the-step-value">Adjusting the Step Value</a></h3>
+<p>The step value determines how much <code>i</code> is incremented (or decremented) on each iteration. For instance, if we modify the step value:</p>
+<pre><code class="language-lua">for i = 1, 10, 2 do
+    print(i)
+end
+</code></pre>
+<p>This loop increments <code>i</code> by <code>2</code> each time, resulting in the following output:</p>
+<pre><code>1
+3
+5
+7
+9
+</code></pre>
+<h3 id="reverse-iteration"><a class="header" href="#reverse-iteration">Reverse Iteration</a></h3>
+<p>To iterate in reverse, you can provide a negative step value:</p>
+<pre><code class="language-lua">for i = 10, 1, -1 do
+    print(i)
+end
+</code></pre>
+<p>This loop counts down from <code>10</code> to <code>1</code>, producing:</p>
+<pre><code>10
+9
+8
+7
+6
+5
+4
+3
+2
+1
+</code></pre>
+<h3 id="using-variables-in-the-for-loop"><a class="header" href="#using-variables-in-the-for-loop">Using Variables in the <code>for</code> Loop</a></h3>
+<p>Variables can be utilized for dynamic loop bounds and step values:</p>
+<pre><code class="language-lua">local start_val = 1
+local end_val = 10
+local step_val = 2
+
+for i = start_val, end_val, step_val do
+    print(i)
+end
+</code></pre>
+<p>This approach allows for more flexible loops, where bounds and step values can be determined at runtime.</p>
+<h3 id="iterating-over-arrays"><a class="header" href="#iterating-over-arrays">Iterating Over Arrays</a></h3>
+<p>Lua also allows iterating over arrays (or tables) using a <code>for</code> loop:</p>
+<pre><code class="language-lua">local array = {2, 4, 6, 8, 10}
+
+for i = 1, #array do
+    print(array[i])
+end
+</code></pre>
+<p>Here, <code>#array</code> returns the length of the array, and the loop iterates through each element, printing:</p>
+<pre><code>2
+4
+6
+8
+10
+</code></pre>
+<h2 id="the-while-loop"><a class="header" href="#the-while-loop">The <code>while</code> Loop</a></h2>
+<h3 id="basic-syntax-and-usage"><a class="header" href="#basic-syntax-and-usage">Basic Syntax and Usage</a></h3>
+<p>The <code>while</code> loop repeatedly executes a block of code as long as the condition provided is true. The general form is:</p>
+<pre><code class="language-lua">while condition do
+    -- Code block to execute
+end
+</code></pre>
+<h3 id="example-1"><a class="header" href="#example-1">Example</a></h3>
+<p>Consider a scenario where we want to decrease a value until it reaches zero:</p>
+<pre><code class="language-lua">local peeps = 10
+
+while peeps &gt; 0 do
+    print("People left at the party:", peeps)
+    peeps = peeps - 1
+end
+</code></pre>
+<p>This loop continues to print the number of people left at the party until <code>peeps</code> becomes <code>0</code>.</p>
+<h3 id="infinite-loops"><a class="header" href="#infinite-loops">Infinite Loops</a></h3>
+<p>A common use of the <code>while</code> loop is to create infinite loops, typically controlled by a condition or external event. For example:</p>
+<pre><code class="language-lua">while true do
+    print("Infinite loop")
+end
+</code></pre>
+<p>This loop runs indefinitely unless interrupted by an external action (e.g., a break condition).</p>
+<h2 id="the-repeat--until-loop"><a class="header" href="#the-repeat--until-loop">The <code>repeat ... until</code> Loop</a></h2>
+<h3 id="syntax-and-functionality"><a class="header" href="#syntax-and-functionality">Syntax and Functionality</a></h3>
+<p>The <code>repeat ... until</code> loop is similar to the <code>while</code> loop but with one key difference: the condition is evaluated after the loop body is executed, guaranteeing that the loop runs at least once. The syntax is:</p>
+<pre><code class="language-lua">repeat
+    -- Code block to execute
+until condition
+</code></pre>
+<h3 id="example-2"><a class="header" href="#example-2">Example</a></h3>
+<p>Let's illustrate this with an example:</p>
+<pre><code class="language-lua">local x = 1
+
+repeat
+    print("x is:", x)
+    x = x + 1
+until x &gt; 10
+</code></pre>
+<p>This loop increments <code>x</code> from <code>1</code> to <code>10</code>, printing each value. Even if the condition is initially false, the loop executes once before checking.</p>
+<h3 id="key-difference-from-while"><a class="header" href="#key-difference-from-while">Key Difference from <code>while</code></a></h3>
+<p>The <code>repeat ... until</code> loop is particularly useful when the loop must execute at least once, regardless of the initial condition. Consider the following comparison:</p>
+<pre><code class="language-lua">local x = 11
+
+while x &lt; 10 do
+    print("This will not run")
+end
+
+repeat
+    print("This will run at least once")
+until x &lt; 10
+</code></pre>
+<p>In the <code>while</code> loop, the condition is false at the start, so the loop never executes. However, the <code>repeat ... until</code> loop runs once before checking the condition.</p>
+<h2 id="summary"><a class="header" href="#summary">Summary</a></h2>
+<p>In Lua, loops are a powerful tool for repetitive tasks. This tutorial has covered:</p>
+<ol>
+<li><strong>The <code>for</code> loop</strong>: For iterating over a range of numbers with optional steps, and reverse counting.</li>
+<li><strong>The <code>while</code> loop</strong>: For running code blocks as long as a condition is true.</li>
+<li><strong>The <code>repeat ... until</code> loop</strong>: Similar to <code>while</code>, but guarantees at least one execution.</li>
+</ol>
+<p>Understanding and correctly implementing these loops will allow you to create more efficient and dynamic Lua programs. Loops are essential in scenarios where repeated execution is required, such as iterating over collections, handling user inputs, or maintaining game logic.</p>
+<p>Each type of loop has its own unique strengths and appropriate use cases, making them indispensable tools in any programmer's toolkit. As you continue developing in Lua, mastering these loop constructs will significantly enhance your coding efficiency and effectiveness.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="06.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="08.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="06.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="08.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

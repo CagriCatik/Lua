@@ -1,0 +1,336 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>if Statements</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="01.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="02.html"><strong aria-hidden="true">2.</strong> Comments and Printing</a></li><li class="chapter-item expanded "><a href="03.html"><strong aria-hidden="true">3.</strong> Data Types, Scopes, and Variables</a></li><li class="chapter-item expanded "><a href="04.html"><strong aria-hidden="true">4.</strong> Math Operations and Math Library</a></li><li class="chapter-item expanded "><a href="05.html"><strong aria-hidden="true">5.</strong> Strings</a></li><li class="chapter-item expanded "><a href="06.html" class="active"><strong aria-hidden="true">6.</strong> if Statements</a></li><li class="chapter-item expanded "><a href="07.html"><strong aria-hidden="true">7.</strong> Loops</a></li><li class="chapter-item expanded "><a href="08.html"><strong aria-hidden="true">8.</strong> User Input</a></li><li class="chapter-item expanded "><a href="09.html"><strong aria-hidden="true">9.</strong> Tables - Arrays</a></li><li class="chapter-item expanded "><a href="10.html"><strong aria-hidden="true">10.</strong> Functions</a></li><li class="chapter-item expanded "><a href="11.html"><strong aria-hidden="true">11.</strong> Co-Routines</a></li><li class="chapter-item expanded "><a href="12.html"><strong aria-hidden="true">12.</strong> Working with Files</a></li><li class="chapter-item expanded "><a href="13.html"><strong aria-hidden="true">13.</strong> The OS Module</a></li><li class="chapter-item expanded "><a href="14.html"><strong aria-hidden="true">14.</strong> Creating Custom Modules</a></li><li class="chapter-item expanded "><a href="15.html"><strong aria-hidden="true">15.</strong> OOP</a></li><li class="chapter-item expanded "><a href="16.html"><strong aria-hidden="true">16.</strong> Metamethods</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title"></h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="if-statements"><a class="header" href="#if-statements"><code>if</code> Statements</a></h1>
+<p>In this tutorial, we will explore the fundamentals of <code>if</code> statements in Lua. This will provide you with the necessary tools to implement conditional logic in your code, a crucial aspect of any programming language. Mastering <code>if</code> statements allows you to control the flow of your program by executing specific blocks of code based on conditions.</p>
+<h2 id="booleans-in-lua"><a class="header" href="#booleans-in-lua">Booleans in Lua</a></h2>
+<p>Before diving into <code>if</code> statements, it's essential to understand the Boolean data type in Lua. In Lua, Booleans can be either <code>true</code> or <code>false</code>. Additionally, Lua treats <code>nil</code> (the absence of a value) as <code>false</code> in conditional expressions. However, it's crucial to note that <code>nil</code> and <code>false</code> are not the same; both simply evaluate to <code>false</code> in a Boolean context.</p>
+<pre><code class="language-lua">if true then
+    print("The statement was true")
+end
+</code></pre>
+<p>The code above will print "The statement was true" because the condition <code>true</code> evaluates as true. If you change the condition to <code>false</code>:</p>
+<pre><code class="language-lua">if false then
+    print("This will not print")
+end
+</code></pre>
+<p>This code will not print anything because the condition <code>false</code> does not satisfy the <code>if</code> statement.</p>
+<h2 id="truthy-and-falsy-values-in-lua"><a class="header" href="#truthy-and-falsy-values-in-lua">Truthy and Falsy Values in Lua</a></h2>
+<p>In Lua, only <code>false</code> and <code>nil</code> are considered falsy, meaning they evaluate as <code>false</code> in a Boolean context. Any other value, including numbers and strings, is considered truthy and evaluates as <code>true</code>.</p>
+<pre><code class="language-lua">if 2 then
+    print("This will always execute because 2 is truthy")
+end
+</code></pre>
+<p>The condition in this example evaluates as <code>true</code>, causing the code inside the <code>if</code> block to execute.</p>
+<h2 id="comparison-operators"><a class="header" href="#comparison-operators">Comparison Operators</a></h2>
+<p>To make <code>if</code> statements more useful, Lua provides several comparison operators. These include:</p>
+<ul>
+<li><code>&gt;</code>: Greater than</li>
+<li><code>&lt;</code>: Less than</li>
+<li><code>&gt;=</code>: Greater than or equal to</li>
+<li><code>&lt;=</code>: Less than or equal to</li>
+<li><code>~=</code>: Not equal to (Note: In Lua, <code>~=</code> is used for inequality, unlike many other languages where <code>!=</code> is used)</li>
+<li><code>==</code>: Equal to</li>
+</ul>
+<h3 id="example-using-comparison-operators"><a class="header" href="#example-using-comparison-operators">Example: Using Comparison Operators</a></h3>
+<pre><code class="language-lua">local age = 15
+
+if age &gt; 17 then
+    print("You may enter")
+end
+</code></pre>
+<p>In this example, the code inside the <code>if</code> block will not execute because <code>age</code> is less than 17. To include the possibility where <code>age</code> is exactly 17, you could modify the condition:</p>
+<pre><code class="language-lua">if age &gt;= 17 then
+    print("You may enter")
+end
+</code></pre>
+<p>This modification allows the block to execute if <code>age</code> is either 17 or greater.</p>
+<h3 id="logical-operators-and-or-and-not"><a class="header" href="#logical-operators-and-or-and-not">Logical Operators: <code>and</code>, <code>or</code>, and <code>not</code></a></h3>
+<p>Logical operators are used to combine or modify Boolean expressions. Lua provides three logical operators:</p>
+<ul>
+<li><code>and</code>: Both conditions must be true.</li>
+<li><code>or</code>: At least one condition must be true.</li>
+<li><code>not</code>: Inverts the Boolean value.</li>
+</ul>
+<h4 id="example-combining-conditions-with-and"><a class="header" href="#example-combining-conditions-with-and">Example: Combining Conditions with <code>and</code></a></h4>
+<pre><code class="language-lua">if age &gt;= 17 and age &lt; 60 then
+    print("You may enter")
+end
+</code></pre>
+<p>Here, the code will execute only if both conditions are met: <code>age</code> must be at least 17 but less than 60.</p>
+<h4 id="example-combining-conditions-with-or"><a class="header" href="#example-combining-conditions-with-or">Example: Combining Conditions with <code>or</code></a></h4>
+<pre><code class="language-lua">if age &gt;= 17 or age &lt; 10 then
+    print("You may enter")
+end
+</code></pre>
+<p>This code will execute if either condition is true.</p>
+<h4 id="example-using-the-not-operator"><a class="header" href="#example-using-the-not-operator">Example: Using the <code>not</code> Operator</a></h4>
+<pre><code class="language-lua">if not (age &lt; 18) then
+    print("You may enter")
+end
+</code></pre>
+<p>In this case, the <code>not</code> operator inverts the condition. If <code>age</code> is not less than 18, the code inside the <code>if</code> block will execute.</p>
+<h2 id="if-else-and-if-elseif-else-statements"><a class="header" href="#if-else-and-if-elseif-else-statements"><code>if-else</code> and <code>if-elseif-else</code> Statements</a></h2>
+<p>To provide alternative outcomes when a condition is not met, Lua allows the use of <code>else</code> and <code>elseif</code> statements.</p>
+<h3 id="example-using-if-else"><a class="header" href="#example-using-if-else">Example: Using <code>if-else</code></a></h3>
+<pre><code class="language-lua">if age &gt; 20 then
+    print("You are old")
+else
+    print("You are young")
+end
+</code></pre>
+<p>In this example, if the <code>age</code> is not greater than 20, the code under <code>else</code> will execute.</p>
+<h3 id="example-using-if-elseif-else"><a class="header" href="#example-using-if-elseif-else">Example: Using <code>if-elseif-else</code></a></h3>
+<pre><code class="language-lua">if age &gt; 20 then
+    print("You are old")
+elseif age &gt; 10 then
+    print("You are not old or young")
+else
+    print("You are young")
+end
+</code></pre>
+<p>This structure allows for multiple conditional checks, where only the first matching condition's block will execute.</p>
+<h3 id="example-nesting-if-statements"><a class="header" href="#example-nesting-if-statements">Example: Nesting <code>if</code> Statements</a></h3>
+<p>You can also nest <code>if</code> statements to create more complex logical structures.</p>
+<pre><code class="language-lua">if type(age) == "number" then
+    if age &gt; 17 then
+        print("You may enter")
+    end
+end
+</code></pre>
+<h2 id="the-ternary-operator-in-lua"><a class="header" href="#the-ternary-operator-in-lua">The Ternary Operator in Lua</a></h2>
+<p>Lua does not natively support a traditional ternary operator like some other languages. However, a similar effect can be achieved using logical operators.</p>
+<h3 id="example-simulating-a-ternary-operator"><a class="header" href="#example-simulating-a-ternary-operator">Example: Simulating a Ternary Operator</a></h3>
+<pre><code class="language-lua">local old = age &gt; 30 and true or false
+</code></pre>
+<p>In this example, <code>old</code> will be <code>true</code> if <code>age</code> is greater than 30, and <code>false</code> otherwise. The expression is evaluated as follows: if the first condition (<code>age &gt; 30</code>) is true, the <code>and</code> operator returns <code>true</code>. If not, the <code>or</code> operator returns <code>false</code>.</p>
+<h3 id="important-notes-on-luas-ternary-like-behavior"><a class="header" href="#important-notes-on-luas-ternary-like-behavior">Important Notes on Lua's Ternary-like Behavior</a></h3>
+<p>It's important to note that this approach is not a direct replacement for ternary operators in languages like C or Python. The behavior relies on Lua's evaluation of the <code>and</code> and <code>or</code> operators and may lead to unexpected results if not carefully used.</p>
+<h2 id="conclusion"><a class="header" href="#conclusion">Conclusion</a></h2>
+<p>This tutorial has covered the basic and advanced usage of <code>if</code> statements in Lua, including Boolean logic, comparison and logical operators, and the Lua equivalent of a ternary operator. By mastering these concepts, you can control the flow of your Lua programs, enabling them to perform complex decision-making processes. Proper use of <code>if</code> statements is critical in writing robust and maintainable code.</p>
+<p>To further solidify your understanding, consider experimenting with different conditional logic scenarios in Lua, and observe how the behavior of <code>if</code> statements changes based on various conditions.</p>
+<p>This knowledge is foundational to your development as a Lua programmer and will serve you well in any projects that require conditional logic.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="05.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="07.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="05.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="07.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

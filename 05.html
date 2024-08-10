@@ -1,0 +1,364 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Strings</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="01.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="02.html"><strong aria-hidden="true">2.</strong> Comments and Printing</a></li><li class="chapter-item expanded "><a href="03.html"><strong aria-hidden="true">3.</strong> Data Types, Scopes, and Variables</a></li><li class="chapter-item expanded "><a href="04.html"><strong aria-hidden="true">4.</strong> Math Operations and Math Library</a></li><li class="chapter-item expanded "><a href="05.html" class="active"><strong aria-hidden="true">5.</strong> Strings</a></li><li class="chapter-item expanded "><a href="06.html"><strong aria-hidden="true">6.</strong> if Statements</a></li><li class="chapter-item expanded "><a href="07.html"><strong aria-hidden="true">7.</strong> Loops</a></li><li class="chapter-item expanded "><a href="08.html"><strong aria-hidden="true">8.</strong> User Input</a></li><li class="chapter-item expanded "><a href="09.html"><strong aria-hidden="true">9.</strong> Tables - Arrays</a></li><li class="chapter-item expanded "><a href="10.html"><strong aria-hidden="true">10.</strong> Functions</a></li><li class="chapter-item expanded "><a href="11.html"><strong aria-hidden="true">11.</strong> Co-Routines</a></li><li class="chapter-item expanded "><a href="12.html"><strong aria-hidden="true">12.</strong> Working with Files</a></li><li class="chapter-item expanded "><a href="13.html"><strong aria-hidden="true">13.</strong> The OS Module</a></li><li class="chapter-item expanded "><a href="14.html"><strong aria-hidden="true">14.</strong> Creating Custom Modules</a></li><li class="chapter-item expanded "><a href="15.html"><strong aria-hidden="true">15.</strong> OOP</a></li><li class="chapter-item expanded "><a href="16.html"><strong aria-hidden="true">16.</strong> Metamethods</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title"></h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="strings"><a class="header" href="#strings">Strings</a></h1>
+<p>In this tutorial, we will delve into the intricacies of working with strings in Lua. Strings are a fundamental data type in Lua, used for representing sequences of characters, such as text. Understanding how to manipulate strings efficiently is crucial for any Lua programmer, as strings are commonly used in a wide variety of applications, from simple scripts to complex data processing tasks.</p>
+<p>This tutorial will cover the essential string operations in Lua, including string creation, manipulation, and various utility functions provided by Lua's standard string library. We will also address some common pitfalls and provide detailed explanations of how Lua handles strings internally.</p>
+<h2 id="basic-string-operations"><a class="header" href="#basic-string-operations">Basic String Operations</a></h2>
+<h3 id="string-creation"><a class="header" href="#string-creation">String Creation</a></h3>
+<p>In Lua, strings are sequences of characters enclosed in either double (<code>"</code>) or single (<code>'</code>) quotes. Lua treats both types of quotes equally, meaning there is no difference between using one or the other. Here's a basic example of creating a string:</p>
+<pre><code class="language-lua">local str = "Hello, World!"
+print(str)
+</code></pre>
+<p>This will output:</p>
+<pre><code>Hello, World!
+</code></pre>
+<h3 id="string-type-verification"><a class="header" href="#string-type-verification">String Type Verification</a></h3>
+<p>You can verify that a variable is a string by using the <code>type()</code> function:</p>
+<pre><code class="language-lua">local str = "Hello, World!"
+print(type(str))  -- Output: string
+</code></pre>
+<h3 id="multi-line-strings"><a class="header" href="#multi-line-strings">Multi-Line Strings</a></h3>
+<p>Lua supports multi-line strings using double square brackets <code>[[</code> and <code>]]</code>. This is particularly useful when you need to include a block of text or code that spans multiple lines:</p>
+<pre><code class="language-lua">local multiline_str = [[
+Hello, World!
+My name is Jack.
+2 + 2 is equal to 4.
+]]
+print(multiline_str)
+</code></pre>
+<p>This will output:</p>
+<pre><code>Hello, World!
+My name is Jack.
+2 + 2 is equal to 4.
+</code></pre>
+<h3 id="string-length"><a class="header" href="#string-length">String Length</a></h3>
+<p>To obtain the length of a string (i.e., the number of characters), Lua provides two methods: using the <code>#</code> operator or the <code>string.len()</code> function.</p>
+<pre><code class="language-lua">local str = "Hello, World!"
+print(#str)           -- Output: 13
+print(string.len(str)) -- Output: 13
+</code></pre>
+<h3 id="string-concatenation"><a class="header" href="#string-concatenation">String Concatenation</a></h3>
+<p>String concatenation in Lua is performed using the <code>..</code> operator. This operator appends one string to another:</p>
+<pre><code class="language-lua">local greeting = "Hello"
+local target = "World"
+local full_greeting = greeting .. ", " .. target .. "!"
+print(full_greeting)  -- Output: Hello, World!
+</code></pre>
+<p>Note that Lua does not automatically add spaces between concatenated strings; you must include them manually if needed.</p>
+<h3 id="string-to-number-conversion"><a class="header" href="#string-to-number-conversion">String to Number Conversion</a></h3>
+<p>Lua allows you to convert a string to a number and vice versa. The <code>tostring()</code> function converts a number to a string:</p>
+<pre><code class="language-lua">local num = 22
+local str_num = tostring(num)
+print(type(str_num))  -- Output: string
+</code></pre>
+<p>Conversely, the <code>tonumber()</code> function can convert a string that represents a number back into a numeric type:</p>
+<pre><code class="language-lua">local str = "22"
+local num = tonumber(str)
+print(type(num))  -- Output: number
+</code></pre>
+<h2 id="advanced-string-operations"><a class="header" href="#advanced-string-operations">Advanced String Operations</a></h2>
+<h3 id="escape-characters"><a class="header" href="#escape-characters">Escape Characters</a></h3>
+<p>Escape characters in Lua are used to include special characters in strings that are otherwise difficult to type directly. These are prefixed with a backslash (<code>\</code>). Common escape sequences include:</p>
+<ul>
+<li><code>\n</code> for a newline</li>
+<li><code>\t</code> for a tab</li>
+<li><code>\\</code> for a backslash</li>
+<li><code>\"</code> for a double quote</li>
+<li><code>\'</code> for a single quote</li>
+</ul>
+<p>Example:</p>
+<pre><code class="language-lua">local str = "Hello\nWorld!\tLua"
+print(str)
+</code></pre>
+<p>This will output:</p>
+<pre><code>Hello
+World!  Lua
+</code></pre>
+<h3 id="case-conversion"><a class="header" href="#case-conversion">Case Conversion</a></h3>
+<p>Lua provides built-in functions to convert strings to lowercase or uppercase:</p>
+<ul>
+<li><code>string.lower()</code> converts a string to lowercase.</li>
+<li><code>string.upper()</code> converts a string to uppercase.</li>
+</ul>
+<p>Example:</p>
+<pre><code class="language-lua">local str = "Hello, World!"
+print(string.lower(str))  -- Output: hello, world!
+print(string.upper(str))  -- Output: HELLO, WORLD!
+</code></pre>
+<h3 id="substrings"><a class="header" href="#substrings">Substrings</a></h3>
+<p>Extracting a substring from a string can be done using the <code>string.sub()</code> function, which takes three arguments: the string, the starting index, and the ending index.</p>
+<pre><code class="language-lua">local str = "Hello, World!"
+local sub_str = string.sub(str, 1, 5)
+print(sub_str)  -- Output: Hello
+</code></pre>
+<h3 id="ascii-conversion"><a class="header" href="#ascii-conversion">ASCII Conversion</a></h3>
+<p>Lua provides functions to convert between ASCII values and characters:</p>
+<ul>
+<li><code>string.char()</code> converts an ASCII value to a character.</li>
+<li><code>string.byte()</code> converts a character to its ASCII value.</li>
+</ul>
+<p>Example:</p>
+<pre><code class="language-lua">local char_a = string.char(65)
+local byte_a = string.byte("A")
+print(char_a)  -- Output: A
+print(byte_a)  -- Output: 65
+</code></pre>
+<h3 id="string-repetition"><a class="header" href="#string-repetition">String Repetition</a></h3>
+<p>The <code>string.rep()</code> function repeats a string a specified number of times. An optional third parameter allows you to specify a separator between repetitions:</p>
+<pre><code class="language-lua">local repeated_str = string.rep("Hello", 3, ", ")
+print(repeated_str)  -- Output: Hello, Hello, Hello
+</code></pre>
+<h3 id="string-formatting"><a class="header" href="#string-formatting">String Formatting</a></h3>
+<p>Lua supports basic string formatting similar to C's <code>printf</code> function, using the <code>string.format()</code> function:</p>
+<pre><code class="language-lua">local formatted_str = string.format("Pi is approximately %.2f", math.pi)
+print(formatted_str)  -- Output: Pi is approximately 3.14
+</code></pre>
+<p>In this example, <code>%.2f</code> specifies that the floating-point number should be rounded to two decimal places.</p>
+<h3 id="finding-substrings"><a class="header" href="#finding-substrings">Finding Substrings</a></h3>
+<p>To find the position of a substring within a string, use the <code>string.find()</code> function:</p>
+<pre><code class="language-lua">local str = "Hello, World!"
+local start_pos, end_pos = string.find(str, "World")
+print(start_pos, end_pos)  -- Output: 8 12
+</code></pre>
+<p>If the substring is not found, <code>string.find()</code> returns <code>nil</code>.</p>
+<h3 id="string-replacement"><a class="header" href="#string-replacement">String Replacement</a></h3>
+<p>To replace occurrences of a substring within a string, Lua provides the <code>string.gsub()</code> function:</p>
+<pre><code class="language-lua">local str = "Hello, World!"
+local new_str, num_replacements = string.gsub(str, "o", "O")
+print(new_str)  -- Output: HellO, WOrld!
+print(num_replacements)  -- Output: 2
+</code></pre>
+<h3 id="matching-patterns"><a class="header" href="#matching-patterns">Matching Patterns</a></h3>
+<p>Lua's pattern matching capabilities allow you to search for and manipulate substrings based on specific patterns using <code>string.match()</code>:</p>
+<pre><code class="language-lua">local str = "Hello, World!"
+local match = string.match(str, "Wo.ld")
+print(match)  -- Output: World
+</code></pre>
+<h2 id="conclusion"><a class="header" href="#conclusion">Conclusion</a></h2>
+<p>This tutorial has provided an in-depth overview of string manipulation in Lua, covering basic string operations, advanced techniques, and useful functions from the Lua standard string library. By mastering these concepts, you will be well-equipped to handle a wide range of tasks involving text processing in Lua.</p>
+<p>Understanding and utilizing these string operations effectively will significantly enhance your ability to write robust and efficient Lua programs, whether you are developing small scripts or working on large-scale projects.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="04.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="06.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="04.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="06.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

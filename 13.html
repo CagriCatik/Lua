@@ -1,0 +1,323 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>The OS Module</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="01.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="02.html"><strong aria-hidden="true">2.</strong> Comments and Printing</a></li><li class="chapter-item expanded "><a href="03.html"><strong aria-hidden="true">3.</strong> Data Types, Scopes, and Variables</a></li><li class="chapter-item expanded "><a href="04.html"><strong aria-hidden="true">4.</strong> Math Operations and Math Library</a></li><li class="chapter-item expanded "><a href="05.html"><strong aria-hidden="true">5.</strong> Strings</a></li><li class="chapter-item expanded "><a href="06.html"><strong aria-hidden="true">6.</strong> if Statements</a></li><li class="chapter-item expanded "><a href="07.html"><strong aria-hidden="true">7.</strong> Loops</a></li><li class="chapter-item expanded "><a href="08.html"><strong aria-hidden="true">8.</strong> User Input</a></li><li class="chapter-item expanded "><a href="09.html"><strong aria-hidden="true">9.</strong> Tables - Arrays</a></li><li class="chapter-item expanded "><a href="10.html"><strong aria-hidden="true">10.</strong> Functions</a></li><li class="chapter-item expanded "><a href="11.html"><strong aria-hidden="true">11.</strong> Co-Routines</a></li><li class="chapter-item expanded "><a href="12.html"><strong aria-hidden="true">12.</strong> Working with Files</a></li><li class="chapter-item expanded "><a href="13.html" class="active"><strong aria-hidden="true">13.</strong> The OS Module</a></li><li class="chapter-item expanded "><a href="14.html"><strong aria-hidden="true">14.</strong> Creating Custom Modules</a></li><li class="chapter-item expanded "><a href="15.html"><strong aria-hidden="true">15.</strong> OOP</a></li><li class="chapter-item expanded "><a href="16.html"><strong aria-hidden="true">16.</strong> Metamethods</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title"></h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="the-os-module"><a class="header" href="#the-os-module">The OS Module</a></h1>
+<p>This tutorial will provide a comprehensive and detailed exploration of the <code>os</code> module in Lua. The <code>os</code> module is a standard library module that enables Lua programs to interact with the underlying operating system. It provides functions for dealing with time, executing commands, managing environment variables, and handling files. Understanding and correctly utilizing the <code>os</code> module is crucial for developing robust and efficient Lua applications.</p>
+<h2 id="time-handling-with-ostime"><a class="header" href="#time-handling-with-ostime">Time Handling with <code>os.time</code></a></h2>
+<p>The <code>os.time</code> function returns the current time in seconds since the Unix epoch (January 1, 1970). This is a common way to represent time in computing, especially in Unix-like operating systems.</p>
+<pre><code class="language-lua">print(os.time())
+</code></pre>
+<p>The code above outputs the current time as the number of seconds since the Unix epoch. This value changes with each execution, reflecting the passage of time.</p>
+<h2 id="specifying-a-specific-date"><a class="header" href="#specifying-a-specific-date">Specifying a Specific Date</a></h2>
+<p>The <code>os.time</code> function can also accept a table representing a specific date. This allows for the calculation of the number of seconds between the Unix epoch and the specified date.</p>
+<pre><code class="language-lua">local date_table = {
+    year = 2000,
+    month = 10,
+    day = 1,
+    hour = 13,    -- 1 PM
+    min = 20,
+    sec = 10
+}
+
+print(os.time(date_table))
+</code></pre>
+<p>This returns the number of seconds from the Unix epoch up to the specified date and time.</p>
+<h2 id="calculating-time-differences-with-osdifftime"><a class="header" href="#calculating-time-differences-with-osdifftime">Calculating Time Differences with <code>os.difftime</code></a></h2>
+<p>The <code>os.difftime</code> function calculates the difference between two time values in seconds. This is useful for timing events or measuring the duration of processes.</p>
+<pre><code class="language-lua">local start_time = os.time()
+
+-- Perform some operations...
+
+local end_time = os.time()
+print(os.difftime(end_time, start_time))
+</code></pre>
+<p>This code measures the time taken to execute the operations between <code>start_time</code> and <code>end_time</code>.</p>
+<h2 id="retrieving-the-current-date-with-osdate"><a class="header" href="#retrieving-the-current-date-with-osdate">Retrieving the Current Date with <code>os.date</code></a></h2>
+<p>The <code>os.date</code> function returns the current date and time in a human-readable format.</p>
+<pre><code class="language-lua">print(os.date())
+</code></pre>
+<p>By default, this returns a string representing the current date and time. The format of the output can be customized using format strings.</p>
+<pre><code class="language-lua">print(os.date("%A, %B %d, %Y %H:%M:%S"))
+</code></pre>
+<p>This outputs a more detailed and readable date string, such as "Friday, July 23, 2021 19:00:00".</p>
+<h2 id="environment-variables-with-osgetenv"><a class="header" href="#environment-variables-with-osgetenv">Environment Variables with <code>os.getenv</code></a></h2>
+<p>Environment variables are key-value pairs maintained by the operating system, which can influence the behavior of processes. The <code>os.getenv</code> function retrieves the value of an environment variable.</p>
+<pre><code class="language-lua">print(os.getenv("HOME"))
+</code></pre>
+<p>This retrieves the value of the <code>HOME</code> environment variable, which typically points to the user's home directory on Unix-like systems. Note that the availability and names of environment variables may differ between operating systems.</p>
+<h2 id="file-operations-renaming-and-removing-files"><a class="header" href="#file-operations-renaming-and-removing-files">File Operations: Renaming and Removing Files</a></h2>
+<p>The <code>os.rename</code> and <code>os.remove</code> functions allow Lua scripts to manipulate files directly from the code.</p>
+<h2 id="renaming-a-file"><a class="header" href="#renaming-a-file">Renaming a File</a></h2>
+<pre><code class="language-lua">os.rename("myfile.txt", "newname.js")
+</code></pre>
+<p>This code renames <code>myfile.txt</code> to <code>newname.js</code>. The extension is also changed, illustrating how the function can handle both renaming and extension changes.</p>
+<h2 id="removing-a-file"><a class="header" href="#removing-a-file">Removing a File</a></h2>
+<pre><code class="language-lua">os.remove("newname.js")
+</code></pre>
+<p>This removes <code>newname.js</code> from the file system. This operation is irreversible, so it should be used with caution.</p>
+<h2 id="executing-operating-system-commands-with-osexecute"><a class="header" href="#executing-operating-system-commands-with-osexecute">Executing Operating System Commands with <code>os.execute</code></a></h2>
+<p>The <code>os.execute</code> function allows Lua scripts to execute operating system commands. However, this should be used sparingly and with caution.</p>
+<pre><code class="language-lua">os.execute("whoami")
+</code></pre>
+<p>This executes the <code>whoami</code> command, which outputs the current user's name.</p>
+<h2 id="risks-of-using-osexecute"><a class="header" href="#risks-of-using-osexecute">Risks of Using <code>os.execute</code></a></h2>
+<p>Using <code>os.execute</code> carries significant risks:</p>
+<ol>
+<li>
+<p><strong>Security Risks</strong>: Executing arbitrary commands from Lua can be dangerous. For example, if a script accidentally runs a command like <code>rm -rf /</code>, it could delete critical system files, leading to data loss or a non-functional system.</p>
+</li>
+<li>
+<p><strong>Cross-Platform Compatibility</strong>: Commands differ between operating systems. A script that works on Linux might not work on Windows or macOS. For instance, the command to clear the terminal differs across platforms (<code>clear</code> on Linux/macOS and <code>cls</code> on Windows).</p>
+</li>
+</ol>
+<p>Given these risks, it's advisable to avoid <code>os.execute</code> unless absolutely necessary. Instead, prefer using Lua's built-in functions or cross-platform libraries whenever possible.</p>
+<h2 id="timing-code-execution-with-osclock"><a class="header" href="#timing-code-execution-with-osclock">Timing Code Execution with <code>os.clock</code></a></h2>
+<p>The <code>os.clock</code> function returns the CPU time used by the program, which can be used to time code execution.</p>
+<pre><code class="language-lua">local start = os.clock()
+
+-- Code to be timed
+for i = 1, 1e6 do
+    local x = i * 2
+end
+
+local finish = os.clock()
+print("Time taken: " .. (finish - start) .. " seconds")
+</code></pre>
+<p>This script measures how long it takes to execute the loop. Note that <code>os.clock</code> measures CPU time, not real-world time.</p>
+<h2 id="exiting-a-lua-program-with-osexit"><a class="header" href="#exiting-a-lua-program-with-osexit">Exiting a Lua Program with <code>os.exit</code></a></h2>
+<p>The <code>os.exit</code> function terminates the execution of a Lua program.</p>
+<pre><code class="language-lua">for i = 1, 10 do
+    if i == 5 then
+        os.exit()
+    end
+    print(i)
+end
+</code></pre>
+<p>This script prints numbers from 1 to 4, and then exits when <code>i</code> equals 5, so the numbers 6 to 10 are not printed.</p>
+<h2 id="conclusion"><a class="header" href="#conclusion">Conclusion</a></h2>
+<p>The <code>os</code> module in Lua is a powerful tool for interacting with the underlying operating system. However, with this power comes responsibility. Certain functions, such as <code>os.execute</code>, can be hazardous if not used correctly. It's crucial to understand the implications of each function and use them appropriately to ensure your Lua programs are safe, efficient, and portable.</p>
+<p>For further exploration, consult the <a href="https://www.lua.org/manual/5.1/">Lua 5.1 Reference Manual</a>. It provides detailed documentation on the <code>os</code> module and other aspects of the Lua language.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="12.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="14.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="12.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="14.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>
